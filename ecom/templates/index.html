@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Products</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="flash-message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="product-list">
+        {% for product in products %}
+            <div class="product">
+                {% if product.image_filename %}
+                    <img src="{{ url_for('static', filename='uploads/' + product.image_filename) }}"
+                         alt="{{ product.name }}">
+                {% else %}
+                    <div class="image-placeholder"></div>
+                {% endif %}
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p>${{ "%.2f" | format(product.price) }}</p>
+                {% if product.material %}
+                    <p>{{ product.material }}</p>
+                {% endif %}
+                {% if product.brand %}
+                    <p>{{ product.brand }}</p>
+                {% endif %}
+                <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}" class="variant-form" data-product-id="{{ product.id }}">
+                    {% set sizes = [] %}
+                    {% set colors = [] %}
+                    {% for variant in product.variants %}
+                        {% if variant.size and variant.size not in sizes %}
+                            {% do sizes.append(variant.size) %}
+                        {% endif %}
+                        {% if variant.color and variant.color not in colors %}
+                            {% do colors.append(variant.color) %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if sizes or colors %}
+                        <div class="dropdown-container">
+                            {% if sizes %}
+                                <select name="size" id="size-{{ product.id }}" class="size-select">
+                                    <option value="N/A">Select</option>
+                                    {% for size in sizes %}
+                                        <option value="{{ size }}">{{ size }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                            {% if colors %}
+                                <select name="color" id="color-{{ product.id }}" class="color-select">
+                                    <option value="N/A">Select</option>
+                                    {% for color in colors %}
+                                        <option value="{{ color }}">{{ color }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productVariants = {
+                {% for product in products %}
+                    "{{ product.id }}": [
+                        {% for variant in product.variants %}
+                            { size: {{ variant.size | tojson | safe }}, color: {{ variant.color | tojson | safe }}, stock: {{ variant.stock }} },
+                        {% endfor %}
+                    ],
+                {% endfor %}
+            };
+            window.productVariants = window.productVariants || {};
+            Object.assign(window.productVariants, productVariants);
+
+            const forms = document.querySelectorAll('.variant-form');
+            forms.forEach(form => {
+                const productId = form.dataset.productId;
+                const sizeSelect = form.querySelector(`#size-${productId}`);
+                const colorSelect = form.querySelector(`#color-${productId}`);
+
+                function updateDropdowns(selectedSize, selectedColor) {
+                    if (sizeSelect) {
+                        Array.from(sizeSelect.options).forEach(option => {
+                            if (option.value !== "N/A") {
+                                const hasStock = productVariants[productId].some(v =>
+                                    v.size === (option.value === "N/A" ? null : option.value) &&
+                                    (selectedColor === "N/A" || selectedColor === null || v.color === selectedColor) &&
+                                    v.stock > 0
+                                );
+                                option.disabled = !hasStock;
+                                option.text = option.value + (option.disabled ? " - Sold Out" : "");
+                            }
+                        });
+                    }
+                    if (colorSelect) {
+                        Array.from(colorSelect.options).forEach(option => {
+                            if (option.value !== "N/A") {
+                                const hasStock = productVariants[productId].some(v =>
+                                    v.color === (option.value === "N/A" ? null : option.value) &&
+                                    (selectedSize === "N/A" || selectedSize === null || v.size === selectedSize) &&
+                                    v.stock > 0
+                                );
+                                option.disabled = !hasStock;
+                                option.text = option.value + (option.disabled ? " - Sold Out" : "");
+                            }
+                        });
+                    }
+                }
+
+                if (sizeSelect && colorSelect) {
+                    updateDropdowns("N/A", "N/A");
+                    sizeSelect.addEventListener('change', function() {
+                        const selectedSize = this.value;
+                        updateDropdowns(selectedSize, colorSelect ? colorSelect.value : "N/A");
+                    });
+                    colorSelect.addEventListener('change', function() {
+                        const selectedColor = this.value;
+                        updateDropdowns(sizeSelect ? sizeSelect.value : "N/A", selectedColor);
+                    });
+                } else if (sizeSelect) {
+                    updateDropdowns(sizeSelect.value, "N/A");
+                    sizeSelect.addEventListener('change', function() {
+                        updateDropdowns(this.value, "N/A");
+                    });
+                } else if (colorSelect) {
+                    updateDropdowns("N/A", colorSelect.value);
+                    colorSelect.addEventListener('change', function() {
+                        updateDropdowns("N/A", this.value);
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}

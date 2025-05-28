@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Admin - Manage Products</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="flash-message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h2>Manage Products</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Variants</th>
+            <th>Actions</th>
+        </tr>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>
+                    {% if product.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' + product.image_filename) }}"
+                             alt="{{ product.name }}" class="admin-product-image">
+                    {% endif %}
+                </td>
+                <td>{{ product.name }}</td>
+                <td>
+                    <ul class="variant-list">
+                        {% for variant in product.variants %}
+                            <li class="variant-item">
+                                <div class="variant-grid">
+                                    <span class="variant-label">Size:</span>
+                                    <span class="variant-value">{{ variant.size or 'N/A' }}</span>
+                                    <span class="variant-label">Color:</span>
+                                    <span class="variant-value">{{ variant.color or 'N/A' }}</span>
+                                    <span class="variant-label">Stock:</span>
+                                    <span class="variant-stock">
+                                        <form method="POST" class="inline-form">
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            <input type="hidden" name="variant_id" value="{{ variant.id }}">
+                                            <input type="number" name="stock" value="{{ variant.stock }}" min="0" class="stock-input">
+                                            <button type="submit">Update</button>
+                                        </form>
+                                    </span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                        {% if not product.variants %}
+                            <li>No variants defined</li>
+                        {% endif %}
+                    </ul>
+                </td>
+                <td class="actions">
+                    <form method="POST" class="inline-form" onsubmit="return confirm('Are you sure you want to delete {{ product.name }}? This will delete all variants.');">
+                        <input type="hidden" name="delete_product_id" value="{{ product.id }}">
+                        <button type="submit" class="delete-button">Delete Product</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Add New Product</h2>
+    <form method="POST" enctype="multipart/form-data" class="admin-form">
+        <div>
+            <label for="new_name">Name:</label>
+            <input type="text" id="new_name" name="new_name" required>
+        </div>
+        <div>
+            <label for="new_price">Price:</label>
+            <input type="number" id="new_price" name="new_price" step="0.01" min="0" required>
+        </div>
+        <div class="description-field">
+            <label for="new_description">Description:</label>
+            <textarea id="new_description" name="new_description"></textarea>
+        </div>
+        <div class="image-checkbox-row">
+            <div class="image-field">
+                <label for="image">Product Image:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="checkbox-container">
+                <div class="optional-detail">
+                    <label>
+                        <input type="checkbox" name="include_material" class="toggle-checkbox"> Material
+                    </label>
+                    <input type="text" name="material" class="optional-input" placeholder="e.g., Cotton">
+                </div>
+                <div class="optional-detail">
+                    <label>
+                        <input type="checkbox" name="include_brand" class="toggle-checkbox"> Brand
+                    </label>
+                    <input type="text" name="brand" class="optional-input" placeholder="e.g., Generic">
+                </div>
+            </div>
+        </div>
+        <div class="variant-section" id="variant-section">
+            <h3>Variants</h3>
+            <div class="variant-row">
+                <input type="text" name="variant_size[]" placeholder="Size (e.g., S)">
+                <input type="text" name="variant_color[]" placeholder="Color (e.g., Red)">
+                <input type="number" name="variant_stock[]" placeholder="Stock" min="0">
+            </div>
+        </div>
+        <button type="button" onclick="addVariantRow()">Add Another Variant</button>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <script>
+        function addVariantRow() {
+            const section = document.getElementById('variant-section');
+            const newRow = document.createElement('div');
+            newRow.className = 'variant-row';
+            newRow.innerHTML = `
+                <input type="text" name="variant_size[]" placeholder="Size (e.g., S)">
+                <input type="text" name="variant_color[]" placeholder="Color (e.g., Red)">
+                <input type="number" name="variant_stock[]" placeholder="Stock" min="0">
+            `;
+            section.appendChild(newRow);
+        }
+    </script>
+{% endblock %}

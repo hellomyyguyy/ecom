@@ -1,0 +1,450 @@
+/* Apply Orbitron site-wide */
+body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #00b7ff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #008cba;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: linear-gradient(90deg, #2a2a2a 0%, #1a1a1a 100%);
+    padding: 20px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+    border-bottom: 3px solid #00d4ff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 212, 255, 0.5);
+}
+
+.site-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: #00d4ff;
+}
+
+.site-title a {
+    color: #00d4ff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.site-title a:hover {
+    color: #ff4081;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    padding: 12px 18px;
+    color: #00d4ff;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .nav-links {
+        margin-top: 15px;
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+    .nav-links a {
+        display: block;
+        text-align: center;
+    }
+}
+
+/* General Button Styles */
+button {
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-family: 'Orbitron', sans-serif;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* Form Input Styles */
+input, textarea, select {
+    background-color: #2a2a2a;
+    color: white;
+    border: 1px solid #555;
+    padding: 8px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Product List Styles */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.product {
+    background: #2a2a2a;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 350px;
+}
+
+.product img {
+    max-width: 200px;
+    max-height: 200px;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    object-fit: cover;
+    align-self: center;
+}
+
+.product .image-placeholder {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 10px;
+    background-color: #333;
+    border-radius: 4px;
+    align-self: center;
+}
+
+.product h2 {
+    font-size: 20px;
+    margin: 10px 0 5px;
+    color: #00d4ff;
+}
+
+.product p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.product form {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.product .dropdown-container {
+    display: flex;
+    gap: 10px;
+}
+
+.product select {
+    width: 95px;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+.product button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.product select option[disabled] {
+    color: #888;
+    background-color: #444;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #333;
+}
+
+tr {
+    border-bottom: 1px solid #555;
+}
+
+.admin-product-image {
+    max-width: 100px;
+    max-height: 100px;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.inline-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.inline-form input[type="number"] {
+    width: 60px;
+    margin-bottom: 0;
+    padding: 4px;
+}
+
+.inline-form button {
+    padding: 4px 8px;
+}
+
+.variant-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.variant-item {
+    margin-bottom: 10px;
+}
+
+.variant-grid {
+    display: grid;
+    grid-template-columns: 70px 150px 70px 1fr 70px auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.variant-label {
+    font-weight: bold;
+    text-align: right;
+}
+
+.variant-value {
+    text-align: left;
+}
+
+.variant-stock {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stock-input {
+    width: 60px;
+}
+
+/* Flash Messages */
+.flash-message {
+    color: #00d4ff; /* Site's blue instead of green */
+    margin: 10px 0;
+}
+
+.error-message {
+    color: #ff4444;
+    margin: 10px 0;
+}
+
+/* Admin Form Styles */
+.admin-form {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.admin-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="number"],
+.admin-form input[type="file"] {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.admin-form textarea {
+    width: 100%;
+    height: 100px;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+.admin-form .description-field {
+    grid-column: span 2;
+}
+
+.admin-form .image-checkbox-row {
+    grid-column: span 2;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.admin-form .image-field {
+    flex: 1;
+}
+
+.admin-form .checkbox-container {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    justify-content: center;
+}
+
+.admin-form .optional-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-form .optional-detail label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.admin-form .optional-detail input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.admin-form .optional-input {
+    display: none;
+    width: 200px;
+    margin-top: 5px;
+}
+
+.admin-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    grid-column: span 2;
+}
+
+.variant-section {
+    grid-column: span 2;
+}
+
+.variant-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.variant-row input {
+    flex: 1;
+}
+
+/* Login Form Styles */
+.login-form {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 300px;
+    margin: 20px auto;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Delete Button */
+.delete-button {
+    background-color: #ff4444;
+}
+
+.delete-button:hover {
+    background-color: #cc3333;
+}

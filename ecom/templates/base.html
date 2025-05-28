@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-commerce Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Fonts: Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Animate.css CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Hover.css CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css">
+</head>
+<body>
+    <div class="navbar animate__animated animate__slideInDown">
+        <h1 class="site-title animate__animated animate__zoomIn"><a href="{{ url_for('index') }}" class="hvr-buzz-out">Store</a></h1>
+        <div class="nav-links">
+            <a href="{{ url_for('cart') }}" class="hvr-wobble-horizontal animate__animated animate__bounce">Cart</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}" class="hvr-wobble-horizontal animate__animated animate__bounce">Logout</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.toggle-checkbox');
+            checkboxes.forEach(checkbox => {
+                const input = checkbox.closest('.optional-detail').querySelector('.optional-input');
+                checkbox.addEventListener('change', function() {
+                    input.style.display = this.checked ? 'block' : 'none';
+                });
+                input.style.display = checkbox.checked ? 'block' : 'none';
+            });
+
+            // Add hover animation to navbar
+            const navbar = document.querySelector('.navbar');
+            navbar.addEventListener('mouseenter', function() {
+                this.classList.add('animate__pulse');
+            });
+            navbar.addEventListener('mouseleave', function() {
+                this.classList.remove('animate__pulse');
+            });
+
+            // Add hover animation to Store title
+            const storeLink = document.querySelector('.site-title a');
+            storeLink.addEventListener('mouseenter', function() {
+                this.classList.add('animate__rubberBand');
+            });
+            storeLink.addEventListener('mouseleave', function() {
+                this.classList.remove('animate__rubberBand');
+            });
+
+            // Add hover animation to Cart and Logout
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.classList.add('animate__bounce');
+                });
+                link.addEventListener('mouseleave', function() {
+                    this.classList.remove('animate__bounce');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
